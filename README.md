@@ -3,7 +3,7 @@ to go to previous folder: cd ..
 to come back to original folder: cd
 Name of instance: Ubuntu-instance-catalog
 IP: 54.202.41.238 (public_key)
-private_key: 172.26.12.126
+private_key: 
 DNS: ec2.54.202.41.238.compute-1.amazonaws.com
 
 To add new user grader:
