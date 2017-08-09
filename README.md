@@ -1,19 +1,20 @@
-Project: Linux-Server-Configuration
+# Project: Linux Server Configuration
 
-Name of instance: Ubuntu-instance-catalog
-IP Address: 54.202.41.238 (public_key)
-private_key: 
-URL: ~~ 'http://ec2-54-202-41-238.us-west-2.compute.amazonaws.com' ~~
+Udacity- Full Stack Web Develper Nanodegree by Udacity Eighth Project.
 
-# To add new user grader:
-'sudo useradd -m -s /bin/bash grader'
+## Server:
+###Name of instance: Item-Catalog-Instance
+###IP Address: 54.186.235.61 (public_key)
+Port: 2200
+private_key: Not available () 
+###URL: ~~ 'http://ec2-54-186-235-61.us-west-2.compute.amazonaws.com' ~~
 
-# To give sudo permission to new user grader:
-'sudo adduser grader sudo'
+### Softwares installed
 
-# The finger displays information about the system grader
-$ finger grader
-
+    - Apache2 and modules
+    - PostgreSQL and modules
+    - Git
+    - Pip and virtualenv
 
 # Update all currently installed packages
 # downloads the package lists
@@ -29,7 +30,7 @@ $ finger grader
 #
 'sudo apt-get install finger'
 # To reboot
-'/sbin/reboot'
+'sudo /sbin/reboot'
 
 # Configuration Uncomplicated Firewall (UFW)
 By default, block all incoming connections on all ports:
@@ -67,20 +68,66 @@ By default, block all incoming connections on all ports:
 # To check the status of the firewall, use:
 
 `sudo ufw status`
+## Output:
+To                         Action      From
+--                         ------      ----
+22                         ALLOW       Anywhere                  
+2200/tcp                   ALLOW       Anywhere                  
+80/tcp                     ALLOW       Anywhere                  
+123                        ALLOW       Anywhere                  
+22 (v6)                    ALLOW       Anywhere (v6)             
+2200/tcp (v6)              ALLOW       Anywhere (v6)             
+80/tcp (v6)                ALLOW       Anywhere (v6)             
+123 (v6)                   ALLOW       Anywhere (v6)  
 
-In the local terminal I ran to generate a public and private keys. 
-# ssh-keygen -t rsa
+# Change timezone to UTC
+# To switch to UTC, simply execute:
+'sudo dpkg-reconfigure tzdata',
+# scroll to the bottom of the Continents list and select Etc or None of the above;
+# in the second list, select UTC. If you prefer GMT instead of UTC, it's just above UTC in that list.
 
-# Open the .pub file and coppied the content into the authorized file.
-# To copy press Ctrl+Shift+Alt, which will open up a text box. Paste the text into that box. 
-# Then press Ctrl+Shift+Alt again to go back to the terminal. 
-# Right click to paste the text into the terminal (nano text editor).
-# right click will paste the content.
+# In the local terminal cd /root/.ssh/ folder - ran 
+ 'ssh-keygen -t rsa' - to generate a public and private keys.
+# My identification has been saved in /root/.ssh/grader_key.rsa.
+# public key has been saved in /root/.ssh/grader_key.rsa.pub.
+## passphrase - grader
 
-# My identification has been saved in /root/.ssh/grader.rsa.
-# public key has been saved in /root/.ssh/grader.rsa.pub.
+Create new user grader and give it the permission sudo
+  - SSH into the server 
+   `ssh -i ~/.ssh/grader_key.rsa root@54.186.235.61`
+   
+# To create a new user named grader
+'sudo adduser grader`
+password: password
 
-# Set-up SSH keys for user grader
+# To give sudo permission to new user grader:
+'sudo adduser grader sudo'
+
+# The finger displays information about the system grader
+'sudo finger grader'
+Output:
+Login: grader         Name: Udacity Grader
+Directory: /home/grader             Shell: /bin/bash
+Never logged in.
+No mail.
+No Plan.
+   
+# Create a new file in the sudoers directory:
+`sudo nano /etc/sudoers.d/grader`
+   
+  - Add the following text `grader ALL=(ALL:ALL) ALL`
+  - Run `sudo nano /etc/hosts`
+  
+## Fix `sudo: unable to resolve host` error
+When the `grader` user issues a `sudo` command, got the following warning:
+`sudo: unable to resolve host ip-xx-xx-xx-xxx`
+
+To fix this, the hostname was added to the loopback address in the 
+`cd /etc/hosts` file
+so that th first line now reads:
+`127.0.0.1 localhost ip-xx-xx-xx-xxx` -- ip is the private ip.
+
+# Set-up SSH keys for user grader on virtual machine:
 
 'sudo mkdir /home/grader/.ssh'
 'sudo chown grader:grader /home/grader/.ssh'
@@ -88,23 +135,28 @@ In the local terminal I ran to generate a public and private keys.
 'sudo cp /root/.ssh/authorized_keys /home/grader/.ssh/'
 'sudo chown grader:grader /home/grader/.ssh/authorized_keys'
 'sudo nano /home/grader/.ssh/authorized_keys'
+
+# Open the .pub file and coppied the content into the authorized file.
+#Copy the rsa key generated on local machine to vm's authorized file and save
+# To copy press Ctrl+Shift+Alt, which will open up a text box. Paste the text into that box. 
+# Then press Ctrl+Shift+Alt again to go back to the terminal. 
+# Right click to paste the text into the terminal (nano text editor).
+# right click will paste the content.
+
 'sudo chmod 644 /home/grader/.ssh/authorized_keys'
 
+# reload SSH using 
+'sudo service ssh restart'
+
 # Disable root login
-# Change the following line in the file 
+## Change the following line in the file 
 `sudo nano /etc/ssh/sshd_config`
 From `PermitRootLogin without-password` to `PermitRootLogin no`.
 Also, uncomment the following line so it reads:
-```
+'''
 PasswordAuthentication no
 
-```
-# Change timezone to UTC
-# To switch to UTC, simply execute:
-'sudo dpkg-reconfigure tzdata',
-# scroll to the bottom of the Continents list and select Etc or None of the above;
-# in the second list, select UTC. If you prefer GMT instead of UTC, it's just above UTC in that list.
-
+'''
 
 # added SSH port to 2200
 # Edit the file 
@@ -116,16 +168,24 @@ PasswordAuthentication no
 # Then restart the SSH service:
 `sudo service ssh restart`
 
-# Logged into the server as a grader.
-$ ssh -i ~/.ssh/grader_rsa_key -p 22 grader@54.202.41.238
+# Logged into the server from your local machine as a grader.
+$ ssh -i ~/.ssh/grader -p 22 grader@54.186.235.61
+
+# It will ask you to enter the passphrase:
+# Enter passphrase for key '/root/.ssh/grader': grader
+
 
 # Install Apache to serve a Python mod_wsgi application
-# Install Apache:
 
+
+# Install Apache:
 `sudo apt-get install apache2`
 
 # Install the `libapache2-mod-wsgi` package:
-`sudo apt-get install libapache2-mod-wsgi`
+`sudo apt-get install libapache2-mod-wsgi python-dev`
+
+# Enable mod_wsgi
+'sudo a2enmod wsgi'
 
 # Start the web server with 
 `sudo service apache2 start`
@@ -134,59 +194,176 @@ $ ssh -i ~/.ssh/grader_rsa_key -p 22 grader@54.202.41.238
 
 'dpkg -l libapache2-mod-wsgi'
 
-# How to Install and Log Into PostgreSQL on Ubuntu
 # Install and configure PostgreSQL
-'sudo apt-get remove libpq5'
-'sudo apt-get install libpq-dev'
-'sudo apt-get install postgresql postgresql-contrib'
+  - `sudo apt-get install libpq-dev python-dev`
+  - `sudo apt-get install postgresql postgresql-contrib`
+  # Login as user "postgres"
+  - `sudo su - postgres`
+  # Get into postgreSQL shell
+  - `psql`
+  - `CREATE USER catalog WITH PASSWORD 'password';`
+  - `ALTER USER catalog CREATEDB;`
+  - `CREATE DATABASE catalog WITH OWNER catalog;`
+  - `\c catalog`
+  - `REVOKE ALL ON SCHEMA public FROM public;`
+  - `GRANT ALL ON SCHEMA public TO catalog;`
+  - `\q`
+  - `exit`
 
-# Create a PostgreSQL user called `catalog` with:
-`sudo -u postgres createuser -P catalog`
+#Restart Apache 
+  - `sudo service apache2 restart`  
 
-# You are prompted for a password. This creates a normal user that can't create
-# databases, roles (users).
-# Create an empty database called `catalog` with:
-`sudo -u postgres createdb -O catalog catalog`
-
-# Edit database_setup.py, project.py and itemsinfo.py and change engine = create_engine('sqlite:///itemsdatabase.db')
-# to engine = create_engine('postgresql://catalog:password@localhost/catalog')
-
+# Creating a Flask App
 # Clone the Item Catalog Project from Github
   - Install git using: 
   `sudo apt-get install git`
-  - `cd /deployCatalog`
-  - `sudo mkdir item-catalog`
-  - Change owner of the newly created item-catalog folder:
-  `sudo chown -R grader:grader item-catalog`
-  Clone your project from github `git clone https://github.com/sabrinadowla14/Build-an-Item-Catalog-Application.git item-catalog`
-  - `cd /item-catalog`
-
-# Create the .wsgi File in /deployCatalog/item-catalog/catalog/catalog.wsgi:
-# Using the command 
-'sudo nano /deployCatalog/item-catalog/catalog/catalog.wsgi'
-Add the following lines of code to the catalog.wsgi file:
-#!/usr/bin/python
-import sys
-import logging
-logging.basicConfig(stream=sys.stderr)
-sys.path.insert(0,"/deployCatalog/item-catalog/catalog")
-
-from catalog import app as application
-application.secret_key = 'super_secret_key'
-
-
+  - `cd /var/www`
+  `sudo mkdir catalog`
+  - Change owner of the newly created www folder:
+  `sudo chown -R grader:grader catalog`
+# Clone your project from github 
+`git clone https://github.com/sabrinadowla14/Build-an-Item-Catalog-Application.git catalog`
+  - `cd /catalog`
+  
+  # Inside catalog folder create a static and templates folder
+  'sudo mkdir static templates'
+  
+  # Set new password for grader.
+  'sudo passwd grader' -- password
+  
+ 
 # Rename project.py to __init__.py 
 `sudo mv project.py __init__.py`
+
+# Edit database_setup.py, __init__.py, project.py and itemsinfo.py and change engine = create_engine('sqlite:///itemsdatabase.db')
+# to engine = create_engine('postgresql://catalog:password@localhost/catalog')
+  
 
 # Restart Apache 
 'sudo service apache2 restart'
 
+# Install virtual environment
+    sudo apt-get install python-pip 
+  - Install the virtual environment 
+  `sudo pip install virtualenv`
+  - Create a new virtual environment 
+  `sudo virtualenv venv`
+  - Activate the virutal environment 
+  `source venv/bin/activate`
+
+# Give this command to install Flask inside of (venv):
+
+  'sudo pip install Flask'
+# Install pip with 
+  `sudo apt-get install python-pip`
+# Install other project dependencies 
+  `sudo pip install httplib2 oauth2client sqlalchemy psycopg2 sqlalchemy_utils`
+  
+# Update path of client_secrets.json file
+  - `sudo nano __init__.py`
+  - Change client_secrets.json path to `/var/www/catalog/catalog/client_secret_value.json`
+  
+# Run the following command to test if the installation is successful and the app is running:
+  'sudo python __init__.py' 
+# It should display “Running on http://localhost:5000/”
+# or "Running on http://127.0.0.1:5000/". If you see this message, 
+# you have successfully configured the app. 
+
+# To deactivate the environment, give the following command:
+
+   'deactivate'
+# Run
+- `python /var/www/catalog/catalog/database_setup.py`
+  - Make sure no remote connections to the database are allowed. Check if the contents of this file `sudo nano /etc/postgresql/9.3/main/pg_hba.conf` looks like this:
+  ```
+  local   all             postgres                                peer
+  local   all             all                                     peer
+  host    all             all             127.0.0.1/32            md5
+  host    all             all             ::1/128                 md5
+  ```
+# Create the .wsgi File:
+'sudo nano /var/www/catalog/catalog.wsgi'
+ and add the following inside:
+  ```
+#!/usr/bin/python
+import sys
+import logging
+logging.basicConfig(stream=sys.stderr)
+sys.path.insert(0,"/var/www/catalog/")
+
+from project import app as application
+application.secret_key = 'super_secret_key'
+  ```
+# Restart Apache
+'sudo service apache2 restart'
+  
+  
+  
+# Configure and Enable a New Virtual Host 
+
+# Run this: 
+`sudo nano /etc/apache2/sites-available/catalog.conf`
+- Paste this code: 
+  '''
+  <VirtualHost *:80>
+		ServerName ec2-54-186-235-61.us-west-2.compute.amazonaws.com
+		ServerAdmin admin@ec2-54-186-235-61.us-west-2.compute.amazonaws.com
+		WSGIScriptAlias / /var/www/catalog/catalog.wsgi
+		<Directory /var/www/catalog/catalog/>
+			Order allow,deny
+			Allow from all
+		</Directory>
+		Alias /static /var/www/catalog/catalog/static
+		<Directory /var/www/catalog/catalog/static/>
+			Order allow,deny
+			Allow from all
+		</Directory>
+		ErrorLog ${APACHE_LOG_DIR}/error.log
+		LogLevel warn
+		CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
+  '''
+  
+  
+# Disable the default virtual host with:
+
+`sudo a2dissite 000-default.conf`
+
+# Then enable the catalog app virtual host:
+
+`sudo a2ensite catalog.conf` 
+
+# Install and configure PostgreSQL
+
+'sudo apt-get install postgresql'
+
+
+# go to 'cd /etc/apache2/sites-enabled'
+# Look for symbolic link of catalog.conf file. 
+  
+  
+  
+Now directory structure should look like this:
+|---catalog
+|-----catalog.wsgi
+|--------catalog
+|-----------------------static
+|-----------------------templates
+|-----------------------venv
+|-----------------------__init__.py
+|----------------catalog.wsgi
+
+
+
+# Edit database_setup.py, project.py and itemsinfo.py and change engine = create_engine('sqlite:///itemsdatabase.db')
+# to engine = create_engine('postgresql://catalog:password@localhost/catalog')
+
 # Google OAuth client secrets file - In client_secret_value.json file:
 # Change the `javascript_origins` field to the IP address and AWS assigned URL of the host.
 # In this instance that would be:
-`"javascript_origins":["http://54.202.41.238", "http://ec2-54-202-41-238.us-west-2.compute.amazonaws.com"]`
+`"javascript_origins":["http://54.186.235.61", "http://ec2-54-186-235-61.us-west-2.compute.amazonaws.com"]`
 
-# These addresses also need to be entered into the Google Developers Console -> API Manager
+# These addresses also need to be entered into the Google Developers Console(https://console.developers.google.com/apis/) -> API Manager
 -> Credentials, in the web client under "Authorized JavaScript origins".
 
 # Update the Facebook OAuth client secrets file
@@ -194,112 +371,40 @@ application.secret_key = 'super_secret_key'
 # the correct values.
 
 # In the Facebook developers website, on the Settings page, the website URL needs to read
-`http://ec2-54-202-41-238.us-west-2.compute.amazonaws.com`. 
+`http://ec2-54-186-235-61.us-west-2.compute.amazonaws.com`.
 
 
-## Configure Apache2 to serve the app
-To serve the catalog app using the Apache web server, a virtual host configuration file
-needs to be created in the directory `/etc/apache2/sites-available/`, in this case called
-`catalog-app.conf`. Here are its contents:
-
-```
-<VirtualHost *:80>
-        # The ServerName directive sets the request scheme, hostname and port that
-        # the server uses to identify itself. This is used when creating
-        # redirection URLs. In the context of virtual hosts, the ServerName
-        # specifies what hostname must appear in the request's Host: header to
-        # match this virtual host. For the default virtual host (this file) this
-        # value is not decisive as it is used as a last resort host regardless.
-        # However, you must set it for any further virtual host explicitly.
-        #ServerName www.example.com
-
-        ServerAdmin webmaster@localhost
-
-        # Define WSGI parameters. The daemon process runs as the www-data user.
-        WSGIDaemonProcess catalog user=www-data group=www-data threads=5
-        WSGIProcessGroup catalog
-        WSGIApplicationGroup %{GLOBAL}
-
-        # Define the location of the app's WSGI file
-        WSGIScriptAlias / /deployCatalog/item-catalog/catalog/item-catalog.wsgi
-
-        # Allow Apache to serve the WSGI app from the catalog app directory
-        <Directory /deployCatalog/item-catalog/catalog/>
-                Require all granted
-        </Directory>
-
-        # Setup the static directory (contains CSS, Javascript, etc.)
-        Alias /static /deployCatalog/item-catalog/catalog/static
-
-        # Allow Apache to serve the files from the static directory
-        <Directory  /deployCatalog/item-catalog/catalog/static/>
-                Require all granted
-        </Directory>
-
-        # Available loglevels: trace8, ..., trace1, debug, info, notice, warn,
-        # error, crit, alert, emerg.
-        # It is also possible to configure the loglevel for particular
-        # modules, e.g.
-        #LogLevel info ssl:warn
-
-        ErrorLog ${APACHE_LOG_DIR}/error.log
-        LogLevel warn
-        CustomLog ${APACHE_LOG_DIR}/access.log combined
-</VirtualHost>
-
-Disable the default virtual host with:
-
-`sudo a2dissite 000-default.conf`
-
-Then enable the catalog app virtual host:
-
-`sudo a2ensite catalog-app.conf`
-
-To make these Apache2 configuration changes live, reload Apache:
-
-`sudo service apache2 reload`
-The catalog app should now be available at `http://54.202.41.238` and
-`http://ec2-54-202-41-238.us-west-2.compute.amazonaws.com`
 
 
-Install Flask and other dependencies
-  - Install pip with `sudo apt-get install python-pip`
-  - Install Flask `pip install Flask`
-  - Install other project dependencies `sudo pip install httplib2 oauth2client sqlalchemy psycopg2 sqlalchemy_utils`
-  sudo apt-get install python-psycopg2 python-flask
-  sudo pip install oauth2client
-  sudo pip install requests
-  sudo pip install httplib2
-  sudo pip install flask-seasurf
-
- Install virtual environment
-  `sudo pip install virtualenv`
-    Create a new virtual environment with
-  `sudo virtualenv venv`
-  - Activate the virutal environment 
-  `source venv/bin/activate`
-  - Change permissions 
-  `sudo chmod -R 777 venv`
-  
-  Update path of client_secrets.json file
-  - `nano __init__.py`
-  - Change client_secrets.json path to `/deployCatalog/item-catalog/catalog/client_secret_value.json`
-
-
- Issue:
-
+## Important Commands:
 sudo apt-get purge  apache2 apache2-utils apache2.2-bin
 sudo apt-get autoremove
 sudo apt-get install  apache2 apache2-utils apache2.2-bin 
-
 then make sure no services are running on port 80 Code:
 sudo netstat -l|grep www
+To remove everything in a directory use:
+rm -r /var/www/catalog/catalog/*
+rm: Deleting Files
+File deletion is done using the rm (remove) command.
+rm filename
+sudo /etc/init.d/apache2 restart
 
-Questions:
-1. In item catalog project I have used port 5010 because I was not able to use port 8000.
-In Linux Configuration Server I have used port 80 in ufw. Do I have to use port 50 in firewall?
-2. Not sure if I have created the DNS zone correctly.
-3. Do I have to Install virtual environment?
-4. For facebook do I have to update anything else? 
-5. In client_secret_value.json file do I have to add anything else?
+
+To check apache log:
+sudo tail /var/log/apache2/error.log
+To check the syntax:
+apachectl configtest
+sudo tail /var/log/apache2/error.log 
+
+Important links:
+Reverse DNS service to get the domain name of your server:
+https://remote.12dt.com/
+
+Sources:
+http://flask.pocoo.org/docs/0.12/deploying/mod_wsgi/
+https://help.ubuntu.com/community/PostgreSQL
+https://www.digitalocean.com/community/tutorials/how-to-deploy-a-flask-application-on-an-ubuntu-vps
+https://httpd.apache.org/docs/2.4/vhosts/
+Deploy a Flask Project
+https://www.digitalocean.com/community/tutorials/how-to-deploy-a-flask-application-on-an-ubuntu-vps
 
