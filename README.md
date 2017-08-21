@@ -1,22 +1,38 @@
 # Project: Linux Server Configuration
 
-Udacity- Full Stack Web Develper Nanodegree by Udacity Eighth Project.
+## Udacity Full Stack Web Develper Nanodegree -- eighth Project.
+## Installed Linux server and host my web applications. Secured my server from 
+## a number of attack vectors, installed and configured a database server, and 
+## deployed Item-Catalog web applications onto it.
 
+### Steps:
+* Used Amazon Lightsail Linux Server instance.
+* Log in to Lightsail
+* Create an Instance:
+   - Choose an instance image: Ubuntu - as the operating system
+   - Choose "OS Only" 
+   - Choose instance plan
+   - Give instance a hostname
+   - Wait for it to start up
+   
 ## Server:
-###Name of instance: Item-Catalog-Instance
-###IP Address: 52.15.255.82 (public_key)
-Port: 2200
-private_key: Not available (172.26.9.178) 
-###URL: ~~ 'http://ec2-52-15-255-82.us-east-2.compute.amazonaws.com' ~~
+### Name of the instance: Item-Catalog
+### IP Address: 52.15.255.82 (public_key)
+### private_key: Not available ()
+### Port: 2200   
+Note: Reverse DNS service to get the domain name of your server: https://remote.12dt.com/
+- Enter the public IP address.
+ 
+### URL: ~~ 'http://ec2-52-15-255-82.us-east-2.compute.amazonaws.com' ~~
 
 ### Softwares installed
-
-    - Apache2 and modules
+    
+	- Apache2 and modules
     - PostgreSQL and modules
     - Git
     - Pip and virtualenv
-# In the local terminal cd /root/.ssh/ folder - ran 
- 'ssh-keygen -t rsa' - to generate a public and private keys.
+	
+# In the local terminal cd /root/.ssh/  - ran 'ssh-keygen -t rsa' - to generate a public and private keys.
 # My identification has been saved in /root/.ssh/grader_key.rsa.
 # public key has been saved in /root/.ssh/grader_key.rsa.pub.
 ## passphrase - grader01
@@ -29,11 +45,11 @@ Create new user grader and give it the permission sudo
    
    
 # To create a new user named grader
-'sudo adduser grader`
+`sudo adduser grader`
 password: password
 
 # To give sudo permission to new user grader:
-'sudo adduser grader sudo'
+`sudo adduser grader sudo`
 
 # Update all currently installed packages
 # downloads the package lists
@@ -44,15 +60,14 @@ password: password
 
 # will remove those dependencies that were installed with applications
 # and that are no longer used by anything else on the system
-'sudo apt-get autoremove'
+`sudo apt-get autoremove`
 
-#
-'sudo apt-get install finger'
+`sudo apt-get install finger`
 # To reboot
-'sudo /sbin/reboot'
+`sudo /sbin/reboot`
 
 # The finger displays information about the system grader
-'sudo finger grader'
+`sudo finger grader`
 Output:
 Login: grader         Name: Udacity Grader
 Directory: /home/grader             Shell: /bin/bash
@@ -60,8 +75,6 @@ Never logged in.
 No mail.
 No Plan.
    
-
-
 # Configuration Uncomplicated Firewall (UFW)
 By default, block all incoming connections on all ports:
 
@@ -71,9 +84,9 @@ By default, block all incoming connections on all ports:
 
 `sudo ufw default allow outgoing`
 
-'sudo ufw status'
+`sudo ufw status`
 
-'sudo ufw allow ssh'
+`sudo ufw allow ssh`
 
 # Allow incoming connection for SSH on port 2200:
 
@@ -125,16 +138,11 @@ To fix this, the hostname was added to the loopback address in the
 so that th first line now reads:
 `127.0.0.1 localhost ip-xx-xx-xx-xxx` -- ip is the private ip.
 
-
-
 # Change timezone to UTC
 # To switch to UTC, simply execute:
 'sudo dpkg-reconfigure tzdata',
 # scroll to the bottom of the Continents list and select Etc or None of the above;
 # in the second list, select UTC. If you prefer GMT instead of UTC, it's just above UTC in that list.
-
-
-
 
 # Set-up SSH keys for user grader on virtual machine:
 
@@ -251,7 +259,7 @@ performing privileged tasks.
         sudo apt-get install python-psycopg2
   - `sudo apt-get install libpq-dev python-dev`
   - `sudo apt-get install postgresql postgresql-contrib`
-  `* To check, no remote connections are allowed :
+  `- To check, no remote connections are allowed :
         sudo vim /etc/postgresql/9.5/main/pg_hba.conf looks like this:
   ```
   local   all             postgres                                peer
@@ -323,7 +331,8 @@ if __name__ == "__main__":
 ```
 
 
-# Edit database_setup.py, __init__.py, project.py and itemsinfo.py and change engine = create_engine('sqlite:///itemsdatabase.db')
+# Edit database_setup.py, __init__.py, project.py and itemsinfo.py and 
+  change engine = create_engine('sqlite:///itemsdatabase.db')
 # to engine = create_engine('postgresql://catalog:password@localhost/catalog')
   
 
@@ -447,20 +456,17 @@ Now directory structure should look like this:
 |-----------------------venv
 |-----------------------__init__.py
 |
-
-
-
 # Edit database_setup.py, project.py and itemsinfo.py and change engine = create_engine('sqlite:///itemsdatabase.db')
 # to engine = create_engine('postgresql://catalog:password@localhost/catalog')
 
 # Google OAuth client secrets file - In client_secret_value.json file:
 # Google Authorization steps:
-  # Go to [console.developer](https://console.developers.google.com/)
+  # Go to https://console.developers.google.com/
   # click on Credentails --> edit
   - add you hostname "http://ec2-52-15-255-82.us-east-2.compute.amazonaws.com" and public IP address "http://52.15.255.82" 
     to Authorised   JavaScript origins.
-  - add hostname (http://ec2-52-15-255-82.us-east-2.compute.amazonaws.com/oauth2callback) to Authorised redirect URIs.
-  * update the client_secret.json file too(adding hostname and public IP address).
+  - add hostname http://ec2-52-15-255-82.us-east-2.compute.amazonaws.com/oauth2callback to Authorised redirect URIs.
+  - update the client_secret_value.json file too -- add hostname and public IP address.
 # Change the `javascript_origins` field to the IP address and AWS assigned URL of the host.
 # In this instance that would be:
 `"javascript_origins":["http://52.15.255.82", "http://ec2-52-15-255-82.us-east-2.compute.amazonaws.com"]`
@@ -474,19 +480,21 @@ Now directory structure should look like this:
 # the correct values.
 
 # Facebook Authorization steps:
-  # Go to [developer.facebook](https://developers.facebook.com/)
+  # Go to https://developers.facebook.com/
   # open your application and click on Facebook Login --> settings.
   # Add hostname and public IP address to Valid OAuth redirect URIs and save it.
 `http://ec2-52-15-255-82.us-east-2.compute.amazonaws.com`.
 `http://ec2-52-15-255-82.us-east-2.compute.amazonaws.com/oauthcallback.html`
 
+```
 # Change the path in client_secrets_value.json and fb_client_secrets.json files. 
 # give absolute path to these files . change the CLIENT_ID = json.loads( open('client_secrets_value.json', 'r').read())['web']['client_id'] to
-
 open(r'/var/www/catalog/catalog/client_secrets_value.json', 'r').read())['web']['client_id']```
+
 Similarly for `fb_client_secrets.json` file. Similarly change the path for `fb_client_secrets.json` file.
 # Apache runs as the user www-data, so it is this user that needs access. 
 # In any case, you can set it so that any user can read the file, like this:
+
 
 'sudo chmod 664 /var/www/catalog/catalog/client_secret_value.json'
 
@@ -507,43 +515,42 @@ Git hub Link For "Build an Item Catalog Project":
 `https://github.com/sabrinadowla14/Build-an-Item-Catalog-Application`
 
 Important Commands:
-sudo apt-get purge  apache2 apache2-utils apache2.2-bin
-sudo apt-get autoremove
-sudo apt-get install  apache2 apache2-utils apache2.2-bin 
-then make sure no services are running on port 80 Code:
-sudo netstat -l|grep www
-To remove everything in a directory use:
-rm -r /var/www/catalog/catalog/*
-rm: Deleting Files
-File deletion is done using the rm (remove) command.
-rm filename
-sudo /etc/init.d/apache2 restart
-$ sudo /etc/init.d/ssh restart or # service sshd restart
+`sudo apt-get purge  apache2 apache2-utils apache2.2-bin`
+`sudo apt-get autoremove`
+`sudo apt-get install  apache2 apache2-utils apache2.2-bin `
+# then make sure no services are running on port 80 Code:
+`sudo netstat -l|grep www`
+# To remove everything in a directory use:
+`rm -r /var/www/catalog/catalog/`
+# rm: Deleting Files
+# File deletion is done using the rm (remove) command.
+`rm filename`
+`sudo /etc/init.d/apache2 restart`
+`sudo /etc/init.d/ssh restart or # service sshd restart`
 # To empty a file
-sudo cp /dev/null filename
+`sudo cp /dev/null filename`
 # what packages have been installed:  `pip freeze`
-What you want to do is ask PostgreSQL:
-SHOW hba_file;
-location for all log files is /var/log and subdirectories. 
-Try /var/log/apache/access.log or /var/log/apache2/access.log
+# What you want to do is ask PostgreSQL:
+# SHOW hba_file;
+# location for all log files is /var/log and subdirectories. 
+# Try /var/log/apache/access.log or /var/log/apache2/access.log
 
-To check apache log:
-sudo tail /var/log/apache2/error.log
-To check the syntax:
-apachectl configtest
-sudo tail /var/log/apache2/error.log
-sudo less /var/log/apache2/error.log 
+# To check apache log:
+`sudo tail /var/log/apache2/error.log`
+# To check the syntax:
+# apachectl configtest
+`sudo tail /var/log/apache2/error.log`
+`sudo less /var/log/apache2/error.log `
 
-Important Sources:
-Reverse DNS service to get the domain name of your server:
+# Important Sources:
+# Reverse DNS service to get the domain name of your server:
 https://remote.12dt.com/
-
 http://flask.pocoo.org/docs/0.12/deploying/mod_wsgi/
 https://help.ubuntu.com/community/PostgreSQL
 https://www.digitalocean.com/community/tutorials/how-to-deploy-a-flask-application-on-an-ubuntu-vps
 https://askubuntu.com/questions/483670/what-causes-ssh-problems-after-rebooting-a-14-04-server
 https://httpd.apache.org/docs/2.4/vhosts/
-Deploy a Flask Project
+# Deploy a Flask Project
 https://www.digitalocean.com/community/tutorials/how-to-deploy-a-flask-application-on-an-ubuntu-vps
 https://www.digitalocean.com/community/tutorials/how-to-configure-ssh-key-based-authentication-on-a-linux-server
 http://www.hcidata.info/host2ip.cgi
