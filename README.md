@@ -1,11 +1,11 @@
 # Project: Linux Server Configuration
 
-### Udacity Full Stack Web Developer Nanodegree -- eighth Project.
-### Installed Linux server and host my web applications. Secured my server from 
-### a number of attack vectors, installed and configured a database server, and 
-### deployed Item-Catalog web applications onto it.
+## Udacity Full Stack Web Developer Nanodegree -- eighth Project.
+## Installed Linux server and host my web applications. Secured my server from 
+## a number of attack vectors, installed and configured a database server, and 
+## deployed Item-Catalog web applications onto it.
 
-### Steps:
+## Steps:
 * Used Amazon Lightsail Linux Server instance.
 * Log in to Lightsail
 * Create an Instance:
@@ -16,10 +16,10 @@
    - Wait for it to start up
    
 ## Server:
-### Name of the instance: Item-Catalog
-### IP Address: 52.15.255.82 (public_key)
-### private_key: Not available ()
-### Port: 2200   
+## Name of the instance: Item-Catalog
+## IP Address: 52.15.255.82 (public_key)
+## private_key: Not available ()
+## Port: 2200   
 Note: Reverse DNS service to get the domain name of your server: https://remote.12dt.com/
 - Enter the public IP address.
  
