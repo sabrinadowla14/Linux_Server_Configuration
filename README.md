@@ -15,11 +15,11 @@
    - Give instance a hostname
    - Wait for it to start up
    
-## Server:
-## Name of the instance: Item-Catalog
-## IP Address: 52.15.255.82 (public_key)
-## private_key: Not available ()
-## Port: 2200   
+### Server:
+### Name of the instance: Item-Catalog
+### IP Address: 52.15.255.82 (public_key)
+### private_key: Not available ()
+### Port: 2200   
 Note: Reverse DNS service to get the domain name of your server: https://remote.12dt.com/
 - Enter the public IP address.
  
