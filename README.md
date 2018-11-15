@@ -1,11 +1,11 @@
 # Project: Linux Server Configuration
 
-## Udacity Full Stack Web Developer Nanodegree -- eighth Project.
-## Installed Linux server and host my web applications. Secured my server from 
-## a number of attack vectors, installed and configured a database server, and 
-## deployed Item-Catalog web applications onto it.
+### Udacity Full Stack Web Developer Nanodegree -- eighth Project.
+### Installed Linux server and host my web applications. Secured my server from 
+### a number of attack vectors, installed and configured a database server, and 
+### deployed Item-Catalog web applications onto it.
 
-## Steps:
+### Steps:
 * Used Amazon Lightsail Linux Server instance.
 * Log in to Lightsail
 * Create an Instance:
